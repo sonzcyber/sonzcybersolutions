@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonz Cyber Solutions | Auth Portal</title>
+    <link rel="icon" type="image/jpeg" href="New logo.jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --brand-gradient: linear-gradient(135deg, #ff7e00 0%, #a43ab2 50%, #0076ff 100%);
+            --dark: #020617;
+            --accent-blue: #0076ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background: #020617;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 126, 0, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 118, 255, 0.1) 0%, transparent 40%);
+        }
+
+        .auth-card {
+            background: white;
+            width: 95%;
+            max-width: 420px;
+            padding: 40px;
+            border-radius: 32px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            transition: 0.4s ease;
+        }
+
+        .logo-area { text-align: center; margin-bottom: 25px; }
+        .logo-area img { height: 65px; border-radius: 12px; margin-bottom: 15px; }
+        .logo-area h2 { font-weight: 800; color: var(--dark); font-size: 1.5rem; }
+
+        /* Hide sections by default */
+        .auth-view { display: none; animation: fadeIn 0.4s ease; }
+        .auth-view.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .input-wrapper { margin-bottom: 15px; }
+        .input-wrapper label { display: block; font-size: 0.7rem; font-weight: 800; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; }
+        .input-group { position: relative; }
+        .input-group i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #cbd5e1; }
+        .input-group input {
+            width: 100%; padding: 14px 14px 14px 50px; border-radius: 14px;
+            border: 2px solid #f1f5f9; outline: none; transition: 0.3s; font-size: 0.95rem;
+        }
+        .input-group input:focus { border-color: var(--accent-blue); background: white; }
+
+        .submit-btn {
+            width: 100%; background: var(--brand-gradient); color: white;
+            border: none; padding: 16px; border-radius: 14px; font-weight: 800;
+            cursor: pointer; transition: 0.3s; font-size: 1rem; margin-top: 10px;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(164, 58, 178, 0.3); }
+
+        .footer-links { margin-top: 20px; text-align: center; font-size: 0.85rem; color: #64748b; }
+        .footer-links a { color: var(--accent-blue); text-decoration: none; font-weight: 700; cursor: pointer; }
+
+        .success-state { text-align: center; padding: 20px 0; }
+        .success-state i { font-size: 3rem; color: #22c55e; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <div class="logo-area">
+            <img src="New logo.jpeg" alt="Sonz Logo">
+            <h2 id="view-title">Welcome Back</h2>
+        </div>
+
+        <!-- LOGIN VIEW -->
+        <div id="login-view" class="auth-view active">
+            <form onsubmit="handleAuth(event, 'login')">
+                <div class="input-wrapper">
+                    <label>Email Address</label>
+                    <div class="input-group"><i class="fas fa-envelope"></i><input type="email" placeholder="email@example.com" required></div>
+                </div>
+                <div class="input-wrapper">
+                    <label>Password</label>
+                    <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="••••••••" required></div>
+                </div>
+                <button type="submit" class="submit-btn">SIGN IN TO PORTAL</button>
+            </form>
+            <div class="footer-links">
+                <a onclick="showView('forgot')">Forgot Password?</a><br><br>
+                Don't have an account? <a onclick="showView('signup')">Create Account</a>
+            </div>
+        </div>
+
+        <!-- SIGNUP VIEW -->
+        <div id="signup-view" class="auth-view">
+            <form onsubmit="handleAuth(event, 'signup')">
+                <div class="input-wrapper">
+                    <label>Full Name</label>
+                    <div class="input-group"><i class="fas fa-user"></i><input type="text" placeholder="John Doe" required></div>
+                </div>
+                <div class="input-wrapper">
+                    <label>Email Address</label>
+                    <div class="input-group"><i class="fas fa-envelope"></i><input type="email" placeholder="name@email.com" required></div>
+                </div>
+                <div class="input-wrapper">
+                    <label>Password</label>
+                    <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="••••••••" required></div>
+                </div>
+                <button type="submit" class="submit-btn">CREATE MY ACCOUNT</button>
+            </form>
+            <div class="footer-links">
+                Already a member? <a onclick="showView('login')">Sign In</a>
+            </div>
+        </div>
+
+        <!-- FORGOT PASSWORD VIEW -->
+        <div id="forgot-view" class="auth-view">
+            <p style="color:#64748b; font-size:0.9rem; margin-bottom:20px; text-align:center;">Enter your email to receive a password reset link.</p>
+            <form onsubmit="handleAuth(event, 'forgot')">
+                <div class="input-wrapper">
+                    <label>Registration Email</label>
+                    <div class="input-group"><i class="fas fa-envelope"></i><input type="email" placeholder="your@email.com" required></div>
+                </div>
+                <button type="submit" class="submit-btn">SEND RESET LINK</button>
+            </form>
+            <div class="footer-links">
+                <a onclick="showView('login')">Back to Login</a>
+            </div>
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <div id="success-view" class="auth-view">
+            <div class="success-state">
+                <i class="fas fa-check-circle"></i>
+                <h3 id="success-msg">Action Successful!</h3>
+                <p style="color:#64748b; margin-top:10px; font-size:0.9rem;">Building your 3-in-1 experience...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showView(view) {
+            // Hide all
+            document.querySelectorAll('.auth-view').forEach(v => v.classList.remove('active'));
+            
+            // Set titles
+            const titles = {
+                login: "Welcome Back",
+                signup: "Join Sonz AI",
+                forgot: "Reset Password",
+                success: "Success!"
+            };
+            document.getElementById('view-title').innerText = titles[view];
+            
+            // Show selected
+            document.getElementById(`${view}-view`).classList.add('active');
+        }
+
+        function handleAuth(e, type) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            
+            // Loading State
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                if(type === 'login') {
+                    showView('success');
+                    document.getElementById('success-msg').innerText = "Logged In Successfully!";
+                    setTimeout(() => window.location.href = 'dashboard.html', 1200);
+                } 
+                else if(type === 'signup') {
+                    showView('success');
+                    document.getElementById('success-msg').innerText = "Account Created!";
+                    setTimeout(() => showView('login'), 2000);
+                }
+                else if(type === 'forgot') {
+                    showView('success');
+                    document.getElementById('success-msg').innerText = "Reset Email Sent!";
+                    setTimeout(() => showView('login'), 3000);
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
